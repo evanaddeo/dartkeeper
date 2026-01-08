@@ -1,31 +1,25 @@
-import { useState } from 'react';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { GameProvider } from './context/GameContext';
+import { HomePage } from './pages/HomePage';
+import { PlayerSetup } from './pages/PlayerSetup';
+import { GameScreen } from './pages/GameScreen';
 
 /**
  * Main DartKeeper application component
+ * Sets up routing and global state management
  */
 function App() {
-  const [score, setScore] = useState<number>(0);
-
   return (
-    <div className="app">
-      <header className="header">
-        <h1>🎯 DartKeeper</h1>
-        <p>Track your darts game with ease</p>
-      </header>
-
-      <main className="main">
-        <div className="score-display">
-          <h2>Current Score</h2>
-          <div className="score">{score}</div>
-        </div>
-
-        <div className="controls">
-          <button onClick={() => setScore(score + 1)}>+1</button>
-          <button onClick={() => setScore(0)}>Reset</button>
-        </div>
-      </main>
-    </div>
+    <GameProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/setup/:gameType" element={<PlayerSetup />} />
+          <Route path="/game/:gameType" element={<GameScreen />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </GameProvider>
   );
 }
 
