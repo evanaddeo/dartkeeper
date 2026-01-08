@@ -33,7 +33,7 @@ const GAME_NAMES: Record<GameType, string> = {
   golf: 'Golf',
 };
 
-export const GameScreen: React.FC = () => {
+const GameScreen: React.FC = () => {
   const navigate = useNavigate();
   const { gameType } = useParams<{ gameType: string }>();
   const { state, dispatch } = useGame();
@@ -444,3 +444,5 @@ export const GameScreen: React.FC = () => {
     </div>
   );
 };
+
+export default GameScreen;

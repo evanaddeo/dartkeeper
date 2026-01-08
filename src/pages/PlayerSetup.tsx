@@ -18,7 +18,7 @@ const GAME_NAMES: Record<GameType, string> = {
   golf: 'Golf',
 };
 
-export const PlayerSetup: React.FC = () => {
+const PlayerSetup: React.FC = () => {
   const navigate = useNavigate();
   const { gameType } = useParams<{ gameType: string }>();
   const { state, dispatch } = useGame();
@@ -231,3 +231,5 @@ export const PlayerSetup: React.FC = () => {
     </div>
   );
 };
+
+export default PlayerSetup;

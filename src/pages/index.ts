@@ -2,7 +2,7 @@
  * Pages Barrel Export
  */
 
-export { HomePage } from './HomePage';
-export { PlayerSetup } from './PlayerSetup';
-export { GameScreen } from './GameScreen';
+export { default as HomePage } from './HomePage';
+export { default as PlayerSetup } from './PlayerSetup';
+export { default as GameScreen } from './GameScreen';
 

@@ -54,7 +54,7 @@ const GAMES: GameInfo[] = [
   },
 ];
 
-export const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGameSelect = (gameType: string) => {
@@ -109,3 +109,5 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
+export default HomePage;

@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl);
+  background: var(--color-background);
+}
+
+.content {
+  max-width: 600px;
+  text-align: center;
+  background: var(--color-card-bg);
+  border: 3px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--color-primary);
+}
+
+.message {
+  font-size: 1.125rem;
+  color: var(--color-neutral);
+  margin: 0 0 var(--spacing-xl) 0;
+  line-height: 1.6;
+}
+
+.details {
+  text-align: left;
+  margin: var(--spacing-xl) 0;
+  padding: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
+}
+
+.details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-neutral);
+  padding: var(--spacing-sm);
+}
+
+.details summary:hover {
+  color: var(--color-primary);
+}
+
+.errorText {
+  margin: var(--spacing-md) 0 0 0;
+  padding: var(--spacing-md);
+  background: rgba(229, 57, 53, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--color-error);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.actions {
+  margin-top: var(--spacing-xl);
+}
+
