@@ -15,6 +15,19 @@ import {
   calculateTotalPointsForNumber,
   checkCricketWin,
 } from '../logic/cricketLogic';
+import {
+  recordHit,
+  freePrisoners,
+  getCurrentTarget,
+  checkPrisonerWin,
+} from '../logic/prisonerLogic';
+import {
+  incrementStrokes,
+  completeHole,
+  allPlayersCompletedHole,
+  advanceHole,
+  checkGolfWin,
+} from '../logic/golfLogic';
 
 /**
  * Game Context for managing global game state
@@ -401,18 +414,163 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
-    // Prisoner actions (stub implementations - will be expanded in Step 5)
-    case 'PRISONER_RECORD_HIT':
-    case 'PRISONER_END_TURN':
-      // TODO: Implement in Step 5
-      return state;
+    // Prisoner actions
+    case 'PRISONER_RECORD_HIT': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'prisoner'
+      ) {
+        return state;
+      }
 
-    // Golf actions (stub implementations - will be expanded in Step 5)
-    case 'GOLF_INCREMENT_STROKE':
-    case 'GOLF_COMPLETE_HOLE':
-    case 'GOLF_ADVANCE_HOLE':
-      // TODO: Implement in Step 5
-      return state;
+      const gameData = state.gameData as PrisonerData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      // Record the hit
+      let newGameData = recordHit(gameData, currentPlayer.id, action.payload.hitType);
+
+      // If valid hit, free prisoners on that number
+      if (action.payload.hitType === 'valid') {
+        const targetNumber = getCurrentTarget(gameData, currentPlayer.id);
+        newGameData = freePrisoners(newGameData, targetNumber);
+      }
+
+      // Check for win
+      const hasWon = checkPrisonerWin(newGameData, currentPlayer.id);
+
+      if (hasWon) {
+        return {
+          ...state,
+          gameData: newGameData,
+          gameStatus: 'finished',
+          winner: currentPlayer,
+        };
+      }
+
+      return {
+        ...state,
+        gameData: newGameData,
+      };
+    }
+
+    case 'PRISONER_END_TURN': {
+      return {
+        ...state,
+        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+      };
+    }
+
+    // Golf actions
+    case 'GOLF_INCREMENT_STROKE': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'golf'
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as GolfData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      const newGameData = incrementStrokes(
+        gameData,
+        currentPlayer.id
+      );
+
+      return {
+        ...state,
+        gameData: newGameData,
+      };
+    }
+
+    case 'GOLF_COMPLETE_HOLE': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'golf'
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as GolfData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      const currentStrokes = gameData.currentStrokes[currentPlayer.id] ?? 0;
+      const totalStrokes = currentStrokes + 1; // +1 for the hit that completed the hole
+
+      // Complete the hole for current player
+      let newGameData = completeHole(
+        gameData,
+        currentPlayer.id,
+        gameData.currentHole,
+        totalStrokes
+      );
+
+      // Check if all players completed the current hole
+      const allCompleted = allPlayersCompletedHole(
+        newGameData,
+        newGameData.currentHole,
+        state.players
+      );
+
+      // If all completed, advance to next hole
+      if (allCompleted && newGameData.currentHole <= 9) {
+        newGameData = advanceHole(newGameData);
+      }
+
+      // Check for win
+      const { isFinished, winner: winnerId } = checkGolfWin(newGameData, state.players);
+      const winner = winnerId ? state.players.find((p) => p.id === winnerId) : null;
+
+      if (isFinished && winner) {
+        return {
+          ...state,
+          gameData: newGameData,
+          gameStatus: 'finished',
+          winner,
+          currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+        };
+      }
+
+      // Advance to next player
+      return {
+        ...state,
+        gameData: newGameData,
+        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+      };
+    }
+
+    case 'GOLF_ADVANCE_HOLE': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'golf'
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as GolfData;
+      const newGameData = advanceHole(gameData);
+
+      return {
+        ...state,
+        gameData: newGameData,
+      };
+    }
 
     default:
       return state;

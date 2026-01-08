@@ -5,8 +5,18 @@ import { Button, Modal } from '../components/common';
 import { ScoreCountdownDisplay } from '../components/game/ScoreCountdownDisplay';
 import { ScoreCountdownInput } from '../components/game/ScoreCountdownInput';
 import { CricketBoard } from '../components/game/CricketBoard';
+import { PrisonerBoard } from '../components/game/PrisonerBoard';
+import { GolfScorecard } from '../components/game/GolfScorecard';
 import { createDartThrow } from '../logic/scoreCountdownLogic';
-import type { ScoreCountdownData, CricketData, CricketNumber, GameType } from '../types/game.types';
+import type {
+  ScoreCountdownData,
+  CricketData,
+  PrisonerData,
+  GolfData,
+  CricketNumber,
+  PrisonerHitType,
+  GameType,
+} from '../types/game.types';
 import styles from './GameScreen.module.css';
 
 /**
@@ -56,6 +66,24 @@ export const GameScreen: React.FC = () => {
     dispatch({ type: 'CRICKET_ADD_MARK', payload: { number: number as CricketNumber } });
   };
 
+  const handlePrisonerHit = (hitType: PrisonerHitType) => {
+    dispatch({ type: 'PRISONER_RECORD_HIT', payload: { hitType } });
+    if (hitType !== 'miss') {
+      // Auto-advance turn after valid hit or prisoner
+      setTimeout(() => {
+        dispatch({ type: 'PRISONER_END_TURN' });
+      }, 100);
+    }
+  };
+
+  const handleGolfIncrementStroke = () => {
+    dispatch({ type: 'GOLF_INCREMENT_STROKE' });
+  };
+
+  const handleGolfCompleteHole = () => {
+    dispatch({ type: 'GOLF_COMPLETE_HOLE' });
+  };
+
   const handleNewGame = () => {
     dispatch({ type: 'RESET_GAME' });
     navigate(`/setup/${gameType}`);
@@ -72,26 +100,147 @@ export const GameScreen: React.FC = () => {
   }
 
   const currentPlayer = state.players[state.currentPlayerIndex];
-  const isScoreCountdown = gameType === '301' || gameType === '501';
   const isCricket = gameType === 'cricket';
+  const isPrisoner = gameType === 'prisoner';
+  const isGolf = gameType === 'golf';
 
-  // Only render 301/501 and Cricket (Steps 3-4)
-  if (!isScoreCountdown && !isCricket) {
+  // Render Prisoner
+  if (isPrisoner) {
+    const prisonerData = state.gameData as PrisonerData;
+
     return (
       <div className={styles.gameScreen}>
         <header className={styles.header}>
-          <h1 className={styles.title}>
-            {gameType && GAME_NAMES[gameType as GameType]}
-          </h1>
-        </header>
-        <main className={styles.main}>
-          <div className={styles.placeholder}>
-            <p>This game will be implemented in Steps 4-5</p>
-            <Button variant="primary" onClick={handleHome}>
-              Return to Home
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>Prisoner</h1>
+            <Button variant="danger" size="sm" onClick={handleHome}>
+              End Game
             </Button>
           </div>
+        </header>
+
+        <main className={styles.main}>
+          <section className={styles.section}>
+            <PrisonerBoard
+              players={state.players}
+              gameData={prisonerData}
+              currentPlayerIndex={state.currentPlayerIndex}
+              onHit={handlePrisonerHit}
+              disabled={state.gameStatus !== 'playing'}
+            />
+          </section>
+
+          <section className={styles.actionSection}>
+            <div className={styles.actionButtons}>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={handleUndo}
+                disabled={state.history.length === 0}
+              >
+                ← Undo
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => dispatch({ type: 'PRISONER_END_TURN' })}
+              >
+                End Turn →
+              </Button>
+            </div>
+          </section>
         </main>
+
+        <Modal
+          isOpen={state.gameStatus === 'finished' && state.winner !== null}
+          onClose={handleHome}
+          title="🎯 Game Over!"
+        >
+          <div className={styles.winModal}>
+            <h2 className={styles.winnerName}>{state.winner?.name} Wins!</h2>
+            <p className={styles.winMessage}>
+              Completed all 20 numbers in sequence!
+            </p>
+
+            <div className={styles.modalButtons}>
+              <Button variant="primary" size="lg" onClick={handleNewGame} fullWidth>
+                New Game
+              </Button>
+              <Button variant="secondary" size="md" onClick={handleHome} fullWidth>
+                Back to Home
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+
+  // Render Golf
+  if (isGolf) {
+    const golfData = state.gameData as GolfData;
+
+    return (
+      <div className={styles.gameScreen}>
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>Golf</h1>
+            <Button variant="danger" size="sm" onClick={handleHome}>
+              End Game
+            </Button>
+          </div>
+        </header>
+
+        <main className={styles.main}>
+          <section className={styles.section}>
+            <GolfScorecard
+              players={state.players}
+              gameData={golfData}
+              currentPlayerIndex={state.currentPlayerIndex}
+              onIncrementStroke={handleGolfIncrementStroke}
+              onCompleteHole={handleGolfCompleteHole}
+              disabled={state.gameStatus !== 'playing'}
+            />
+          </section>
+        </main>
+
+        <Modal
+          isOpen={state.gameStatus === 'finished' && state.winner !== null}
+          onClose={handleHome}
+          title="🎯 Game Over!"
+        >
+          <div className={styles.winModal}>
+            <h2 className={styles.winnerName}>{state.winner?.name} Wins!</h2>
+            <p className={styles.winMessage}>
+              Lowest score after 9 holes!
+            </p>
+
+            <div className={styles.finalScores}>
+              <h3 className={styles.finalScoresTitle}>Final Scores:</h3>
+              {state.players.map((player) => {
+                const score = golfData.scores[player.id];
+                const total = score?.total ?? 0;
+                return (
+                  <div key={player.id} className={styles.finalScoreItem}>
+                    <span className={styles.finalPlayerName}>{player.name}:</span>
+                    <span className={`${styles.finalScore} tabular-nums`}>
+                      {total} strokes
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.modalButtons}>
+              <Button variant="primary" size="lg" onClick={handleNewGame} fullWidth>
+                New Game
+              </Button>
+              <Button variant="secondary" size="md" onClick={handleHome} fullWidth>
+                Back to Home
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }

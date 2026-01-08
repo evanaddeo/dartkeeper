@@ -1,0 +1,243 @@
+.container {
+  width: 100%;
+}
+
+.playerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.playerCard {
+  background: var(--color-card-bg);
+  border: 3px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.currentPlayer {
+  border-color: var(--color-accent);
+  background: linear-gradient(to bottom, rgba(27, 94, 32, 0.05) 0%, var(--color-card-bg) 100%);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.02);
+}
+
+.playerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.playerName {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.currentBadge {
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.targetSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.targetLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.targetNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.progressSection {
+  margin-bottom: var(--spacing-md);
+}
+
+.progressBar {
+  width: 100%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--spacing-sm);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent) 0%, #1B7E24 100%);
+  transition: width var(--transition-normal);
+}
+
+.progressText {
+  display: block;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-neutral);
+}
+
+.prisonersSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: rgba(229, 57, 53, 0.1);
+  border: 2px solid var(--color-error);
+  border-radius: var(--radius-md);
+}
+
+.prisonersLabel {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-error);
+}
+
+.prisonersNumbers {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* Input Section */
+.inputSection {
+  background: var(--color-card-bg);
+  border: 3px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.instructionBanner {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: rgba(27, 94, 32, 0.05);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.instructionText {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}
+
+.instructionText strong {
+  color: var(--color-accent);
+}
+
+.actionButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+.actionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  border: 3px solid;
+  border-radius: var(--radius-lg);
+  background: var(--color-card-bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.actionButton:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.actionButton:active:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hitButton {
+  border-color: var(--color-success);
+}
+
+.hitButton:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.prisonerButton {
+  border-color: var(--color-error);
+}
+
+.prisonerButton:hover:not(:disabled) {
+  background: rgba(229, 57, 53, 0.1);
+}
+
+.missButton {
+  border-color: var(--color-neutral);
+}
+
+.missButton:hover:not(:disabled) {
+  background: rgba(109, 76, 65, 0.1);
+}
+
+.buttonIcon {
+  font-size: 2rem;
+}
+
+.buttonLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.buttonHint {
+  font-size: 0.75rem;
+  color: var(--color-neutral);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .playerGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .currentPlayer {
+    transform: scale(1);
+  }
+
+  .actionButtons {
+    grid-template-columns: 1fr;
+  }
+
+  .targetNumber {
+    font-size: 2rem;
+  }
+}
+
