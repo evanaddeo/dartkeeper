@@ -127,12 +127,147 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // TODO: Implement in Step 4
       return state;
 
-    // 301/501 actions (stub implementations - will be expanded in Step 3)
-    case 'SCORE_COUNTDOWN_RECORD_DART':
-    case 'SCORE_COUNTDOWN_UNDO_DART':
-    case 'SCORE_COUNTDOWN_END_TURN':
-      // TODO: Implement in Step 3
-      return state;
+    // 301/501 actions
+    case 'SCORE_COUNTDOWN_RECORD_DART': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        (state.gameType !== '301' && state.gameType !== '501')
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as ScoreCountdownData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      const currentScore = gameData.remainingScores[currentPlayer.id] ?? gameData.startingScore;
+      const dartValue = action.payload.value;
+      const newScore = currentScore - dartValue;
+
+      // Check for bust
+      if (newScore < 0) {
+        // Bust! Revert to turn start score and end turn
+        const newGameData: ScoreCountdownData = {
+          ...gameData,
+          remainingScores: {
+            ...gameData.remainingScores,
+            [currentPlayer.id]: gameData.turnStartScore,
+          },
+          currentTurnDarts: 0,
+          dartHistory: [],
+        };
+
+        return {
+          ...state,
+          gameData: newGameData,
+          currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+        };
+      }
+
+      // Check for win
+      if (newScore === 0) {
+        const newGameData: ScoreCountdownData = {
+          ...gameData,
+          remainingScores: {
+            ...gameData.remainingScores,
+            [currentPlayer.id]: 0,
+          },
+          currentTurnDarts: 0,
+          dartHistory: [],
+        };
+
+        return {
+          ...state,
+          gameData: newGameData,
+          gameStatus: 'finished',
+          winner: currentPlayer,
+        };
+      }
+
+      // Normal dart - update score
+      const newDartHistory = [...gameData.dartHistory, action.payload];
+      const newDartsCount = gameData.currentTurnDarts + 1;
+
+      // Save state to history before updating
+      const newHistory = [
+        ...state.history,
+        {
+          gameData: state.gameData,
+          currentPlayerIndex: state.currentPlayerIndex,
+          timestamp: Date.now(),
+        },
+      ];
+
+      const newGameData: ScoreCountdownData = {
+        ...gameData,
+        remainingScores: {
+          ...gameData.remainingScores,
+          [currentPlayer.id]: newScore,
+        },
+        currentTurnDarts: newDartsCount,
+        dartHistory: newDartHistory,
+      };
+
+      // Auto-advance after 3 darts
+      if (newDartsCount >= 3) {
+        return {
+          ...state,
+          gameData: {
+            ...newGameData,
+            currentTurnDarts: 0,
+            dartHistory: [],
+            turnStartScore: newScore,
+          },
+          currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+          history: newHistory,
+        };
+      }
+
+      return {
+        ...state,
+        gameData: newGameData,
+        history: newHistory,
+      };
+    }
+
+    case 'SCORE_COUNTDOWN_UNDO_DART': {
+      // Use the undo action instead
+      return gameReducer(state, { type: 'UNDO_ACTION' });
+    }
+
+    case 'SCORE_COUNTDOWN_END_TURN': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        (state.gameType !== '301' && state.gameType !== '501')
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as ScoreCountdownData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      const currentScore = gameData.remainingScores[currentPlayer.id] ?? gameData.startingScore;
+
+      return {
+        ...state,
+        gameData: {
+          ...gameData,
+          currentTurnDarts: 0,
+          dartHistory: [],
+          turnStartScore: currentScore,
+        },
+        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+      };
+    }
 
     // Prisoner actions (stub implementations - will be expanded in Step 5)
     case 'PRISONER_RECORD_HIT':

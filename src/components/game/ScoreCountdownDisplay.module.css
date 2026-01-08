@@ -1,0 +1,129 @@
+.container {
+  width: 100%;
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.playerCard {
+  background: var(--color-card-bg);
+  border: 3px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.currentPlayer {
+  border-color: var(--color-accent);
+  background: linear-gradient(to bottom, rgba(27, 94, 32, 0.05) 0%, var(--color-card-bg) 100%);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.02);
+}
+
+.playerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+}
+
+.playerName {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.currentBadge {
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scoreDisplay {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.score {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-text-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  display: block;
+  line-height: 1;
+}
+
+.checkoutSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.checkoutLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-neutral);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkoutSuggestion {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.finishedBadge {
+  text-align: center;
+  padding: var(--spacing-sm);
+  background: var(--color-success);
+  color: var(--color-text-light);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .scoreGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .score {
+    font-size: 3rem;
+  }
+
+  .playerCard {
+    padding: var(--spacing-md);
+  }
+
+  .currentPlayer {
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scoreGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

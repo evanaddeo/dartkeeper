@@ -1,0 +1,230 @@
+.container {
+  background: var(--color-card-bg);
+  border: 3px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Dart Counter */
+.dartCounter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #1B7E24 100%);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.counterLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.counterValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-light);
+}
+
+/* Selected Display */
+.selectedDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  animation: slideUp var(--transition-fast);
+}
+
+.selectedLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-neutral);
+  text-transform: uppercase;
+}
+
+.selectedValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section Label */
+.sectionLabel {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Multiplier Section */
+.multiplierSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.multiplierButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.multiplierButton {
+  padding: var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.multiplierButton:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+
+.multiplierButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.multiplierButton.active {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Number Grid */
+.numberSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.numberGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.numberButton {
+  aspect-ratio: 1;
+  padding: var(--spacing-md);
+  font-size: 1.125rem;
+  font-weight: 700;
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numberButton:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.numberButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.numberButton.selected {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-light);
+  transform: scale(1.05);
+}
+
+/* Bull Section */
+.bullSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.bullButton {
+  padding: var(--spacing-lg);
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bullButton:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.bullButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bullButton.selected {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-light);
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .numberGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .numberButton {
+    font-size: 1rem;
+    padding: var(--spacing-sm);
+  }
+
+  .selectedValue {
+    font-size: 1.5rem;
+  }
+
+  .multiplierButtons {
+    grid-template-columns: 1fr;
+  }
+}
+
