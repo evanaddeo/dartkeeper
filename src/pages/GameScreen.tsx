@@ -4,8 +4,9 @@ import { useGame } from '../context/GameContext';
 import { Button, Modal } from '../components/common';
 import { ScoreCountdownDisplay } from '../components/game/ScoreCountdownDisplay';
 import { ScoreCountdownInput } from '../components/game/ScoreCountdownInput';
+import { CricketBoard } from '../components/game/CricketBoard';
 import { createDartThrow } from '../logic/scoreCountdownLogic';
-import type { ScoreCountdownData, GameType } from '../types/game.types';
+import type { ScoreCountdownData, CricketData, CricketNumber, GameType } from '../types/game.types';
 import styles from './GameScreen.module.css';
 
 /**
@@ -44,7 +45,15 @@ export const GameScreen: React.FC = () => {
   };
 
   const handleEndTurn = () => {
-    dispatch({ type: 'SCORE_COUNTDOWN_END_TURN' });
+    if (gameType === 'cricket') {
+      dispatch({ type: 'CRICKET_END_TURN' });
+    } else {
+      dispatch({ type: 'SCORE_COUNTDOWN_END_TURN' });
+    }
+  };
+
+  const handleCricketNumberClick = (number: number) => {
+    dispatch({ type: 'CRICKET_ADD_MARK', payload: { number: number as CricketNumber } });
   };
 
   const handleNewGame = () => {
@@ -64,9 +73,10 @@ export const GameScreen: React.FC = () => {
 
   const currentPlayer = state.players[state.currentPlayerIndex];
   const isScoreCountdown = gameType === '301' || gameType === '501';
+  const isCricket = gameType === 'cricket';
 
-  // Only render 301/501 for now (Step 3)
-  if (!isScoreCountdown) {
+  // Only render 301/501 and Cricket (Steps 3-4)
+  if (!isScoreCountdown && !isCricket) {
     return (
       <div className={styles.gameScreen}>
         <header className={styles.header}>
@@ -86,6 +96,97 @@ export const GameScreen: React.FC = () => {
     );
   }
 
+  // Render Cricket
+  if (isCricket) {
+    const cricketData = state.gameData as CricketData;
+
+    return (
+      <div className={styles.gameScreen}>
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>Cricket</h1>
+            <Button variant="danger" size="sm" onClick={handleHome}>
+              End Game
+            </Button>
+          </div>
+        </header>
+
+        <main className={styles.main}>
+          {/* Cricket Board */}
+          <section className={styles.section}>
+            <CricketBoard
+              players={state.players}
+              gameData={cricketData}
+              currentPlayerIndex={state.currentPlayerIndex}
+              onNumberClick={handleCricketNumberClick}
+              disabled={state.gameStatus !== 'playing'}
+            />
+          </section>
+
+          {/* Action Buttons */}
+          <section className={styles.actionSection}>
+            <div className={styles.actionButtons}>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={handleUndo}
+                disabled={state.history.length === 0}
+              >
+                ← Undo
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleEndTurn}
+              >
+                End Turn →
+              </Button>
+            </div>
+          </section>
+        </main>
+
+        {/* Win Modal */}
+        <Modal
+          isOpen={state.gameStatus === 'finished' && state.winner !== null}
+          onClose={handleHome}
+          title="🎯 Game Over!"
+        >
+          <div className={styles.winModal}>
+            <h2 className={styles.winnerName}>{state.winner?.name} Wins!</h2>
+            <p className={styles.winMessage}>
+              All numbers closed with the highest score!
+            </p>
+
+            <div className={styles.finalScores}>
+              <h3 className={styles.finalScoresTitle}>Final Scores:</h3>
+              {state.players.map((player) => {
+                const points = cricketData.points[player.id] ?? 0;
+                return (
+                  <div key={player.id} className={styles.finalScoreItem}>
+                    <span className={styles.finalPlayerName}>{player.name}:</span>
+                    <span className={`${styles.finalScore} tabular-nums`}>
+                      {points} points
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.modalButtons}>
+              <Button variant="primary" size="lg" onClick={handleNewGame} fullWidth>
+                New Game
+              </Button>
+              <Button variant="secondary" size="md" onClick={handleHome} fullWidth>
+                Back to Home
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+
+  // Render 301/501
   const gameData = state.gameData as ScoreCountdownData;
   const dartsRemaining = 3 - gameData.currentTurnDarts;
 

@@ -8,6 +8,13 @@ import type {
   PrisonerData,
   GolfData,
 } from '../types/game.types';
+import {
+  addMark,
+  removeMark,
+  calculatePoints,
+  calculateTotalPointsForNumber,
+  checkCricketWin,
+} from '../logic/cricketLogic';
 
 /**
  * Game Context for managing global game state
@@ -120,12 +127,137 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
-    // Cricket actions (stub implementations - will be expanded in Step 4)
-    case 'CRICKET_ADD_MARK':
-    case 'CRICKET_REMOVE_MARK':
-    case 'CRICKET_END_TURN':
-      // TODO: Implement in Step 4
-      return state;
+    // Cricket actions
+    case 'CRICKET_ADD_MARK': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'cricket'
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as CricketData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      // Add mark
+      const newMarks = addMark(
+        gameData.marks,
+        currentPlayer.id,
+        action.payload.number,
+        1
+      );
+
+      // Calculate points earned from this hit
+      const pointsEarned = calculatePoints(
+        newMarks,
+        currentPlayer.id,
+        action.payload.number,
+        state.players
+      );
+
+      const newPoints = {
+        ...gameData.points,
+        [currentPlayer.id]: (gameData.points[currentPlayer.id] ?? 0) + pointsEarned,
+      };
+
+      const newGameData: CricketData = {
+        marks: newMarks,
+        points: newPoints,
+      };
+
+      // Check for win
+      const winnerId = checkCricketWin(newMarks, newPoints, state.players);
+      const winner = winnerId ? state.players.find((p) => p.id === winnerId) : null;
+
+      // Save to history
+      const newHistory = [
+        ...state.history,
+        {
+          gameData: state.gameData,
+          currentPlayerIndex: state.currentPlayerIndex,
+          timestamp: Date.now(),
+        },
+      ];
+
+      if (winner) {
+        return {
+          ...state,
+          gameData: newGameData,
+          gameStatus: 'finished',
+          winner,
+          history: newHistory,
+        };
+      }
+
+      return {
+        ...state,
+        gameData: newGameData,
+        history: newHistory,
+      };
+    }
+
+    case 'CRICKET_REMOVE_MARK': {
+      if (
+        state.gameStatus !== 'playing' ||
+        !state.gameData ||
+        state.gameType !== 'cricket'
+      ) {
+        return state;
+      }
+
+      const gameData = state.gameData as CricketData;
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      
+      if (!currentPlayer) {
+        return state;
+      }
+
+      // Remove mark
+      const newMarks = removeMark(
+        gameData.marks,
+        currentPlayer.id,
+        action.payload.number
+      );
+
+      // Recalculate total points for this number
+      const newTotalPoints = calculateTotalPointsForNumber(
+        newMarks,
+        currentPlayer.id,
+        action.payload.number,
+        state.players
+      );
+
+      // Get old total points
+      const oldMarks = gameData.marks[currentPlayer.id]?.[action.payload.number] ?? 0;
+      const oldTotalPoints = oldMarks > 3 ? (oldMarks - 3) * action.payload.number : 0;
+
+      // Adjust points
+      const pointsDiff = newTotalPoints - oldTotalPoints;
+      const newPoints = {
+        ...gameData.points,
+        [currentPlayer.id]: Math.max(0, (gameData.points[currentPlayer.id] ?? 0) + pointsDiff),
+      };
+
+      return {
+        ...state,
+        gameData: {
+          marks: newMarks,
+          points: newPoints,
+        },
+      };
+    }
+
+    case 'CRICKET_END_TURN': {
+      return {
+        ...state,
+        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
+      };
+    }
 
     // 301/501 actions
     case 'SCORE_COUNTDOWN_RECORD_DART': {
