@@ -1,19 +1,21 @@
 .container {
   width: 100%;
+  overflow-x: auto;
 }
 
 .board {
+  min-width: 600px;
   background: var(--color-card-bg);
   border: 3px solid var(--color-card-border);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
 /* Header Row */
 .headerRow {
   display: grid;
-  grid-template-columns: 100px repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 100px repeat(auto-fit, minmax(120px, 1fr));
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
   border-bottom: 3px solid var(--color-secondary);
 }
@@ -21,25 +23,33 @@
 .numberHeader,
 .playerHeader {
   padding: var(--spacing-md);
+  text-align: center;
   font-size: 0.875rem;
   font-weight: 700;
-  text-align: center;
   color: var(--color-text-light);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.playerHeader.currentPlayer {
-  background: rgba(27, 94, 32, 0.3);
-  border-left: 3px solid var(--color-secondary);
-  border-right: 3px solid var(--color-secondary);
+.numberHeader {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.playerHeader:last-child {
+  border-right: none;
 }
 
 /* Number Rows */
 .numberRow {
   display: grid;
-  grid-template-columns: 100px repeat(auto-fit, minmax(100px, 1fr));
-  border-bottom: 1px solid var(--color-card-border);
+  grid-template-columns: 100px repeat(auto-fit, minmax(120px, 1fr));
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-fast);
+}
+
+.numberRow:hover {
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .numberRow:last-child {
@@ -48,44 +58,75 @@
 
 .numberCell {
   padding: var(--spacing-lg);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(to right, rgba(212, 175, 55, 0.1) 0%, var(--color-card-bg) 50%);
-  border: none;
-  border-right: 2px solid var(--color-card-border);
-  font-family: inherit;
-  cursor: default;
-}
-
-.numberCell.clickable {
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.numberCell.clickable:hover {
-  background: rgba(27, 94, 32, 0.1);
-  transform: scale(1.05);
+  border-right: 3px solid var(--color-card-border);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .numberLabel {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-primary);
 }
 
+/* Mark Cells - Interactive */
 .markCell {
-  padding: var(--spacing-lg);
-  text-align: center;
+  padding: var(--spacing-xl);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xs);
-  min-height: 70px;
+  min-height: 80px;
+  background: var(--color-card-bg);
+  border: none;
+  border-right: 2px solid var(--color-card-border);
+  cursor: pointer;
   transition: all var(--transition-fast);
+  font-family: inherit;
 }
 
-.markCell.closed {
-  background: rgba(27, 94, 32, 0.1);
+.markCell:last-child {
+  border-right: none;
+}
+
+.markCell:hover:not(:disabled) {
+  background: rgba(27, 94, 32, 0.05);
+  transform: scale(1.02);
+}
+
+.markCell:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.markCell:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Player has opened this number (3+ marks) - GREEN */
+.markCell.playerOpen {
+  background: rgba(76, 175, 80, 0.2);
+  border-left: 4px solid var(--color-success);
+  border-right: 4px solid var(--color-success);
+}
+
+.markCell.playerOpen:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+/* Number is closed for ALL players - RED */
+.markCell.closedForAll {
+  background: rgba(229, 57, 53, 0.2);
+  border-left: 4px solid var(--color-error);
+  border-right: 4px solid var(--color-error);
+  cursor: not-allowed;
+}
+
+.markCell.closedForAll:hover {
+  background: rgba(229, 57, 53, 0.2);
+  transform: none;
 }
 
 .markSymbol {
@@ -95,13 +136,15 @@
   line-height: 1;
 }
 
-.extraMarks {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-secondary);
-  background: rgba(212, 175, 55, 0.2);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
+.openSymbol {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-success);
+  line-height: 1;
+}
+
+.markCell.closedForAll .openSymbol {
+  color: var(--color-error);
 }
 
 /* Points Row */
@@ -112,50 +155,31 @@
 
 .pointsCell {
   padding: var(--spacing-lg);
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.pointsCell:last-child {
+  border-right: none;
 }
 
 .pointsValue {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-accent);
 }
 
-/* Instruction */
-.instruction {
-  margin-top: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  background: rgba(27, 94, 32, 0.05);
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-md);
-  text-align: center;
-}
-
-.instructionText {
-  margin: 0 0 var(--spacing-xs) 0;
-  font-size: 1rem;
-  color: var(--color-primary);
-}
-
-.instructionText strong {
-  color: var(--color-accent);
-}
-
-.instructionHint {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--color-neutral);
-  font-style: italic;
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 767px) {
+  .board {
+    min-width: 100%;
+  }
+
   .headerRow,
   .numberRow {
-    grid-template-columns: 80px repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: 80px repeat(auto-fit, minmax(100px, 1fr));
   }
 
   .numberHeader,
@@ -164,37 +188,46 @@
     font-size: 0.75rem;
   }
 
-  .numberCell {
+  .markCell {
     padding: var(--spacing-md);
+    min-height: 60px;
   }
 
   .numberLabel {
     font-size: 1rem;
   }
 
-  .markCell {
-    padding: var(--spacing-md);
-    min-height: 60px;
-  }
-
   .markSymbol {
     font-size: 1.5rem;
+  }
+
+  .openSymbol {
+    font-size: 2rem;
   }
 
   .pointsValue {
     font-size: 1.25rem;
   }
-
-  .instruction {
-    padding: var(--spacing-md);
-  }
-
-  .instructionText {
-    font-size: 0.875rem;
-  }
-
-  .instructionHint {
-    font-size: 0.75rem;
-  }
 }
 
+.closedCircle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.turnInfo {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: rgba(27, 94, 32, 0.05);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.turnText {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}

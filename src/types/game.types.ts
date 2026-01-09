@@ -100,9 +100,7 @@ export type GameAction =
   | { type: 'UNDO_ACTION' }
   | { type: 'RESET_GAME' }
   // Cricket Actions
-  | { type: 'CRICKET_ADD_MARK'; payload: { number: CricketNumber } }
-  | { type: 'CRICKET_REMOVE_MARK'; payload: { number: CricketNumber } }
-  | { type: 'CRICKET_END_TURN' }
+  | { type: 'CRICKET_ADD_MARK'; payload: { playerId: string; number: CricketNumber } }
   // 301/501 Actions
   | { type: 'SCORE_COUNTDOWN_RECORD_DART'; payload: DartThrow }
   | { type: 'SCORE_COUNTDOWN_UNDO_DART' }

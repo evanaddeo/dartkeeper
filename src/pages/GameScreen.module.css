@@ -214,3 +214,18 @@
   }
 }
 
+
+.turnInfo {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: rgba(27, 94, 32, 0.05);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.turnText {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}

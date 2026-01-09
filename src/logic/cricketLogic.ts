@@ -5,7 +5,7 @@
 
 import type { CricketMarks, CricketNumber, Player } from '../types/game.types';
 
-export const CRICKET_NUMBERS: CricketNumber[] = [15, 16, 17, 18, 19, 20, 25];
+export const CRICKET_NUMBERS: CricketNumber[] = [20, 19, 18, 17, 16, 15, 25];
 
 /**
  * Add marks to a number for a player
@@ -62,9 +62,9 @@ export function removeMark(
 }
 
 /**
- * Check if a number is closed for a player (3+ marks)
+ * Check if a number is open for a player (3+ marks)
  */
-export function isNumberClosed(
+export function isNumberOpen(
   marks: CricketMarks,
   playerId: string,
   number: CricketNumber
@@ -73,8 +73,20 @@ export function isNumberClosed(
 }
 
 /**
- * Calculate points scored for hitting a number
- * Points only scored if your number is closed but opponent's isn't
+ * Check if a number is closed for ALL players (everyone has 3+ marks)
+ */
+export function isNumberClosedForAll(
+  marks: CricketMarks,
+  players: Player[],
+  number: CricketNumber
+): boolean {
+  return players.every((player) => isNumberOpen(marks, player.id, number));
+}
+
+/**
+ * Calculate points scored for hitting a number (single dart)
+ * Points only scored if your number is open AND not closed for all
+ * Returns the number value if conditions are met, 0 otherwise
  */
 export function calculatePoints(
   marks: CricketMarks,
@@ -84,37 +96,30 @@ export function calculatePoints(
 ): number {
   const playerMarks = marks[playerId]?.[number] ?? 0;
 
-  // Must have closed the number (3+ marks) to score points
-  if (playerMarks < 3) {
+  // Must have at least 4 marks to score points (3 to open + 1 to score)
+  if (playerMarks <= 3) {
     return 0;
   }
 
-  // Check if any opponent hasn't closed this number
-  const anyOpponentOpen = players.some((player) => {
-    if (player.id === playerId) return false;
-    return !isNumberClosed(marks, player.id, number);
-  });
-
-  // Only score points if at least one opponent hasn't closed
-  if (!anyOpponentOpen) {
+  // Check if number is closed for ALL players
+  if (isNumberClosedForAll(marks, players, number)) {
     return 0;
   }
 
-  // Score points for marks beyond 3
-  const pointsToScore = playerMarks - 3;
-  return pointsToScore * number;
+  // Score the number value for THIS SINGLE HIT
+  return number;
 }
 
 /**
- * Check if all numbers are closed for a player
+ * Check if all numbers are open for a player
  */
-export function allNumbersClosed(marks: CricketMarks, playerId: string): boolean {
-  return CRICKET_NUMBERS.every((num) => isNumberClosed(marks, playerId, num));
+export function allNumbersOpen(marks: CricketMarks, playerId: string): boolean {
+  return CRICKET_NUMBERS.every((num) => isNumberOpen(marks, playerId, num));
 }
 
 /**
  * Check if player has won Cricket
- * Win: All numbers closed AND score >= all opponents
+ * Win: All numbers open AND score >= all opponents
  */
 export function checkCricketWin(
   marks: CricketMarks,
@@ -122,8 +127,8 @@ export function checkCricketWin(
   players: Player[]
 ): string | null {
   for (const player of players) {
-    // Must have all numbers closed
-    if (!allNumbersClosed(marks, player.id)) {
+    // Must have all numbers open
+    if (!allNumbersOpen(marks, player.id)) {
       continue;
     }
 
@@ -154,7 +159,7 @@ export function getMarkSymbol(markCount: number): string {
 }
 
 /**
- * Calculate total points for marks beyond closing
+ * Calculate total points for marks beyond opening
  */
 export function calculateTotalPointsForNumber(
   marks: CricketMarks,
@@ -168,13 +173,8 @@ export function calculateTotalPointsForNumber(
     return 0;
   }
 
-  // Check if any opponent hasn't closed this number
-  const anyOpponentOpen = players.some((player) => {
-    if (player.id === playerId) return false;
-    return !isNumberClosed(marks, player.id, number);
-  });
-
-  if (!anyOpponentOpen) {
+  // Check if number is closed for ALL players
+  if (isNumberClosedForAll(marks, players, number)) {
     return 0;
   }
 

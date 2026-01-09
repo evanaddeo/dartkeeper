@@ -40,7 +40,9 @@ const GameScreen: React.FC = () => {
 
   // Redirect if game not started or invalid game type
   useEffect(() => {
-    if (state.gameStatus !== 'playing' || !state.gameData) {
+    // Only redirect if game is in setup state or no game data
+    // Allow 'playing' and 'finished' states (finished shows win modal)
+    if ((state.gameStatus !== 'playing' && state.gameStatus !== 'finished') || !state.gameData) {
       navigate('/');
     }
   }, [state.gameStatus, state.gameData, navigate]);
@@ -55,15 +57,11 @@ const GameScreen: React.FC = () => {
   };
 
   const handleEndTurn = () => {
-    if (gameType === 'cricket') {
-      dispatch({ type: 'CRICKET_END_TURN' });
-    } else {
-      dispatch({ type: 'SCORE_COUNTDOWN_END_TURN' });
-    }
+    dispatch({ type: 'SCORE_COUNTDOWN_END_TURN' });
   };
 
-  const handleCricketNumberClick = (number: number) => {
-    dispatch({ type: 'CRICKET_ADD_MARK', payload: { number: number as CricketNumber } });
+  const handleCricketMarkAdd = (playerId: string, number: number) => {
+    dispatch({ type: 'CRICKET_ADD_MARK', payload: { playerId, number: number as CricketNumber } });
   };
 
   const handlePrisonerHit = (hitType: PrisonerHitType) => {
@@ -266,29 +264,22 @@ const GameScreen: React.FC = () => {
             <CricketBoard
               players={state.players}
               gameData={cricketData}
-              currentPlayerIndex={state.currentPlayerIndex}
-              onNumberClick={handleCricketNumberClick}
+              onMarkAdd={handleCricketMarkAdd}
               disabled={state.gameStatus !== 'playing'}
             />
           </section>
 
-          {/* Action Buttons */}
+          {/* Undo Button */}
           <section className={styles.actionSection}>
             <div className={styles.actionButtons}>
               <Button
                 variant="secondary"
-                size="md"
+                size="lg"
                 onClick={handleUndo}
                 disabled={state.history.length === 0}
+                fullWidth
               >
-                ← Undo
-              </Button>
-              <Button
-                variant="primary"
-                size="md"
-                onClick={handleEndTurn}
-              >
-                End Turn →
+                ← Undo Last Dart
               </Button>
             </div>
           </section>
