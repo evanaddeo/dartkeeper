@@ -68,7 +68,6 @@ const HomePage: React.FC = () => {
             <Target className={styles.logoIcon} />
             <h1 className={styles.appTitle}>DartKeeper</h1>
           </div>
-          <p className={styles.tagline}>Professional darts scorekeeping, simplified</p>
         </div>
       </header>
 

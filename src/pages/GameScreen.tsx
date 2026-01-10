@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Target, TrendingDown, Users as UsersIcon, Flag, RotateCcw } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { Button, Modal } from '../components/common';
 import { ScoreCountdownDisplay } from '../components/game/ScoreCountdownDisplay';
@@ -110,7 +111,10 @@ const GameScreen: React.FC = () => {
       <div className={styles.gameScreen}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <h1 className={styles.title}>Prisoner</h1>
+            <div className={styles.titleContainer}>
+              <UsersIcon className={styles.headerIcon} />
+              <h1 className={styles.title}>Prisoner</h1>
+            </div>
             <Button variant="danger" size="sm" onClick={handleHome}>
               End Game
             </Button>
@@ -182,7 +186,10 @@ const GameScreen: React.FC = () => {
       <div className={styles.gameScreen}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <h1 className={styles.title}>Golf</h1>
+            <div className={styles.titleContainer}>
+              <Flag className={styles.headerIcon} />
+              <h1 className={styles.title}>Golf</h1>
+            </div>
             <Button variant="danger" size="sm" onClick={handleHome}>
               End Game
             </Button>
@@ -251,10 +258,24 @@ const GameScreen: React.FC = () => {
       <div className={styles.gameScreen}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <h1 className={styles.title}>Cricket</h1>
-            <Button variant="danger" size="sm" onClick={handleHome}>
-              End Game
-            </Button>
+            <div className={styles.titleContainer}>
+              <Target className={styles.headerIcon} />
+              <h1 className={styles.title}>Cricket</h1>
+            </div>
+            <div className={styles.headerActions}>
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={handleUndo}
+                disabled={state.history.length === 0}
+              >
+                <RotateCcw size={16} />
+                <span>Undo</span>
+              </Button>
+              <Button variant="danger" size="sm" onClick={handleHome}>
+                End Game
+              </Button>
+            </div>
           </div>
         </header>
 
@@ -267,21 +288,6 @@ const GameScreen: React.FC = () => {
               onMarkAdd={handleCricketMarkAdd}
               disabled={state.gameStatus !== 'playing'}
             />
-          </section>
-
-          {/* Undo Button */}
-          <section className={styles.actionSection}>
-            <div className={styles.actionButtons}>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={handleUndo}
-                disabled={state.history.length === 0}
-                fullWidth
-              >
-                ← Undo Last Dart
-              </Button>
-            </div>
           </section>
         </main>
 
@@ -334,9 +340,12 @@ const GameScreen: React.FC = () => {
     <div className={styles.gameScreen}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <h1 className={styles.title}>
-            {gameType && GAME_NAMES[gameType as GameType]}
-          </h1>
+          <div className={styles.titleContainer}>
+            <TrendingDown className={styles.headerIcon} />
+            <h1 className={styles.title}>
+              {gameType && GAME_NAMES[gameType as GameType]}
+            </h1>
+          </div>
           <Button variant="danger" size="sm" onClick={handleHome}>
             End Game
           </Button>

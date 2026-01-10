@@ -150,19 +150,19 @@
 }
 
 .from-blue-500 {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
 }
 
 .from-indigo-500 {
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
 }
 
 .from-purple-500 {
-  background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%);
+  background: linear-gradient(135deg, #EC4899 0%, #BE185D 100%);
 }
 
 .from-amber-500 {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
 }
 
 /* Card Content */

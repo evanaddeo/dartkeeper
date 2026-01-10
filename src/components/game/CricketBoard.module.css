@@ -1,55 +1,95 @@
 .container {
   width: 100%;
   overflow-x: auto;
+  padding: var(--spacing-md);
 }
 
 .board {
-  min-width: 600px;
+  width: 100%;
   background: var(--color-card-bg);
   border: 3px solid var(--color-card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header Row */
 .headerRow {
   display: grid;
-  grid-template-columns: 100px repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
   border-bottom: 3px solid var(--color-secondary);
+  min-height: 60px;
 }
 
 .numberHeader,
 .playerHeader {
   padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--color-text-light);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-right: 2px solid rgba(255, 255, 255, 0.2);
+  border-right: 2px solid var(--color-border);
+  gap: var(--spacing-xs);
 }
 
 .numberHeader {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  max-width: 80px;
+  min-width: 60px;
+}
+
+.playerHeader {
+  min-width: 100px;
 }
 
 .playerHeader:last-child {
   border-right: none;
 }
 
+.playerNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.playerName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 /* Number Rows */
 .numberRow {
   display: grid;
-  grid-template-columns: 100px repeat(auto-fit, minmax(120px, 1fr));
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-  transition: background-color var(--transition-fast);
-}
-
-.numberRow:hover {
-  background: rgba(0, 0, 0, 0.02);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  border-bottom: 2px solid var(--color-border);
+  min-height: 80px;
 }
 
 .numberRow:last-child {
@@ -61,27 +101,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to right, rgba(212, 175, 55, 0.1) 0%, var(--color-card-bg) 50%);
-  border-right: 3px solid var(--color-card-border);
-  font-weight: 700;
-  color: var(--color-primary);
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border-right: 2px solid var(--color-border);
+  font-weight: 800;
+  max-width: 80px;
+  min-width: 60px;
 }
 
 .numberLabel {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text-light);
 }
 
 /* Mark Cells - Interactive */
 .markCell {
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 80px;
+  min-width: 100px;
   background: var(--color-card-bg);
   border: none;
-  border-right: 2px solid var(--color-card-border);
+  border-right: 2px solid var(--color-border);
   cursor: pointer;
   transition: all var(--transition-fast);
   font-family: inherit;
@@ -105,52 +150,50 @@
   opacity: 0.6;
 }
 
-/* Player has opened this number (3+ marks) - GREEN */
-.markCell.playerOpen {
-  background: rgba(76, 175, 80, 0.2);
-  border-left: 4px solid var(--color-success);
-  border-right: 4px solid var(--color-success);
-}
-
-.markCell.playerOpen:hover:not(:disabled) {
-  background: rgba(76, 175, 80, 0.3);
-}
-
-/* Number is closed for ALL players - RED */
-.markCell.closedForAll {
-  background: rgba(229, 57, 53, 0.2);
-  border-left: 4px solid var(--color-error);
-  border-right: 4px solid var(--color-error);
-  cursor: not-allowed;
-}
-
-.markCell.closedForAll:hover {
-  background: rgba(229, 57, 53, 0.2);
-  transform: none;
-}
-
+/* Mark Symbols */
 .markSymbol {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1;
+  color: var(--color-text-primary);
+  font-family: var(--font-score);
 }
 
 .openSymbol {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--color-success);
-  line-height: 1;
+  color: var(--color-accent);
+  font-family: var(--font-score);
 }
 
-.markCell.closedForAll .openSymbol {
-  color: var(--color-error);
+/* Player Open - Green Background */
+.playerOpen {
+  background: rgba(27, 94, 32, 0.15) !important;
+}
+
+.playerOpen:hover:not(:disabled) {
+  background: rgba(27, 94, 32, 0.25) !important;
+}
+
+/* Closed For All - Red Background */
+.closedForAll {
+  background: rgba(220, 38, 38, 0.15) !important;
+  cursor: not-allowed !important;
+}
+
+.closedForAll .openSymbol {
+  color: var(--color-danger);
 }
 
 /* Points Row */
 .pointsRow {
-  background: linear-gradient(to bottom, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.15) 100%);
+  background: rgba(212, 175, 55, 0.1);
   border-top: 3px solid var(--color-secondary);
+  min-height: 70px;
+}
+
+.pointsRow .numberCell {
+  background: var(--color-secondary);
+  color: var(--color-text-primary);
 }
 
 .pointsCell {
@@ -158,7 +201,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 2px solid rgba(0, 0, 0, 0.1);
+  background: var(--color-card-bg);
+  border-right: 2px solid var(--color-border);
+  min-width: 100px;
 }
 
 .pointsCell:last-child {
@@ -166,68 +211,78 @@
 }
 
 .pointsValue {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-accent);
+  font-family: var(--font-score);
+}
+
+/* Dummy Cell (for odd number of players) */
+.dummyCell {
+  background: var(--color-background);
+  border-right: 2px solid var(--color-border);
+  min-width: 100px;
+}
+
+.dummyCell:last-child {
+  border-right: none;
 }
 
 /* Responsive */
-@media (max-width: 767px) {
-  .board {
-    min-width: 100%;
+@media (max-width: 1024px) {
+  .playerHeader,
+  .markCell,
+  .pointsCell,
+  .dummyCell {
+    min-width: 80px;
   }
-
-  .headerRow,
-  .numberRow {
-    grid-template-columns: 80px repeat(auto-fit, minmax(100px, 1fr));
-  }
-
-  .numberHeader,
-  .playerHeader {
-    padding: var(--spacing-sm);
+  
+  .playerName {
     font-size: 0.75rem;
   }
-
-  .markCell {
-    padding: var(--spacing-md);
-    min-height: 60px;
-  }
-
-  .numberLabel {
-    font-size: 1rem;
-  }
-
+  
   .markSymbol {
     font-size: 1.5rem;
   }
-
+  
   .openSymbol {
     font-size: 2rem;
   }
-
+  
   .pointsValue {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 }
 
-.closedCircle {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-accent);
-  line-height: 1;
-}
-
-.turnInfo {
-  text-align: center;
-  padding: var(--spacing-lg);
-  background: rgba(27, 94, 32, 0.05);
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-md);
-}
-
-.turnText {
-  margin: 0;
-  font-size: 1.125rem;
-  color: var(--color-primary);
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  
+  .playerHeader,
+  .markCell,
+  .pointsCell,
+  .dummyCell {
+    min-width: 60px;
+  }
+  
+  .numberCell,
+  .numberHeader {
+    max-width: 60px;
+    min-width: 50px;
+  }
+  
+  .numberLabel {
+    font-size: 1.25rem;
+  }
+  
+  .playerName {
+    font-size: 0.625rem;
+  }
+  
+  .playerNumber {
+    width: 20px;
+    height: 20px;
+    font-size: 0.625rem;
+  }
 }

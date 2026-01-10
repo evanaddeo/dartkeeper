@@ -22,11 +22,84 @@
   gap: var(--spacing-md);
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.headerIcon {
+  width: 32px;
+  height: 32px;
+  color: var(--color-accent-light);
+  flex-shrink: 0;
+}
+
 .title {
   margin: 0;
-  color: var(--color-text-light);
+  color: var(--color-surface);
   font-size: 2rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: var(--font-bold);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.025em;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.headerActions button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Players Row (for Cricket) */
+.playersRow {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.playersList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+.playerBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--font-semibold);
+}
+
+.playerBadgeNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border-radius: 50%;
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
+  flex-shrink: 0;
+}
+
+.playerBadgeName {
+  font-size: var(--font-sm);
 }
 
 /* Main Content */

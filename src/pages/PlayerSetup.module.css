@@ -1,99 +1,180 @@
-.playerSetup {
+.setupPage {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--color-background);
 }
 
 /* Header */
 .header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
-  border-bottom: 4px solid var(--color-secondary);
-  padding: var(--spacing-lg) var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  padding: var(--spacing-xl) var(--spacing-lg);
   box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .headerContent {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-md);
 }
 
-.backButton {
-  flex-shrink: 0;
+.icon {
+  width: 32px;
+  height: 32px;
+  color: var(--color-accent-light);
 }
 
 .title {
-  margin: 0;
+  font-size: var(--font-2xl);
+  font-weight: var(--font-bold);
   color: var(--color-text-light);
-  font-size: 2rem;
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  flex: 1;
-}
-
-.placeholder {
-  width: 80px;
-  flex-shrink: 0;
+  margin: 0;
+  letter-spacing: -0.025em;
 }
 
 /* Main Content */
 .main {
   flex: 1;
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+}
+
+.container {
   max-width: 800px;
-  width: 100%;
   margin: 0 auto;
 }
 
-.setupCard {
-  background: var(--color-card-bg);
-  animation: slideUp var(--transition-normal);
-}
-
-/* Section */
-.section {
-  margin-bottom: var(--spacing-xl);
+/* Section Header */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .sectionTitle {
-  margin: 0 0 var(--spacing-sm) 0;
-  color: var(--color-primary);
-  font-size: 1.75rem;
+  font-size: var(--font-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.025em;
 }
 
 .sectionSubtitle {
-  margin: 0 0 var(--spacing-lg) 0;
-  color: var(--color-neutral);
-  font-size: 1rem;
+  font-size: var(--font-md);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-medium);
+}
+
+/* Card */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* Add Player Section */
+.addPlayerSection {
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.addPlayerForm {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.inputWrapper {
+  flex: 1;
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-md);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.addButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-md);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.addButton:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.addButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.addButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Player List */
 .playerList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-2xl) 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
 }
 
 .playerItem {
+  background: var(--color-surface-hover);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: linear-gradient(to right, rgba(27, 94, 32, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%);
-  border: 2px solid var(--color-secondary);
-  border-radius: var(--radius-md);
   transition: all var(--transition-fast);
-  animation: slideUp var(--transition-fast);
 }
 
 .playerItem:hover {
   border-color: var(--color-accent);
-  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
 }
 
 .playerInfo {
@@ -103,207 +184,116 @@
 }
 
 .playerNumber {
+  width: 36px;
+  height: 36px;
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--color-secondary);
-  color: var(--color-primary);
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: var(--font-bold);
+  font-size: var(--font-md);
   flex-shrink: 0;
 }
 
 .playerName {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--color-primary);
+  font-size: var(--font-md);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
 }
 
 .removeButton {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: 2px solid var(--color-error);
-  border-radius: var(--radius-sm);
-  color: var(--color-error);
-  font-size: 1.25rem;
   cursor: pointer;
   transition: all var(--transition-fast);
+  font-size: var(--font-lg);
   flex-shrink: 0;
 }
 
 .removeButton:hover {
-  background: var(--color-error);
+  background: var(--color-red);
+  border-color: var(--color-red);
   color: var(--color-text-light);
-  transform: scale(1.1);
 }
 
-.removeButton:active {
-  transform: scale(0.95);
+/* Validation Message */
+.validationMessage {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--color-info);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-info);
+  font-weight: var(--font-medium);
+  font-size: var(--font-sm);
+}
+
+/* Start Button Container */
+.startButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.startButton {
+  min-width: 200px;
 }
 
 /* Empty State */
 .emptyState {
   text-align: center;
-  padding: var(--spacing-3xl) var(--spacing-md);
-  border: 2px dashed var(--color-card-border);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  color: var(--color-text-tertiary);
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--spacing-lg);
+  opacity: 0.5;
 }
 
 .emptyText {
-  margin: 0 0 var(--spacing-sm) 0;
-  color: var(--color-neutral);
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--font-md);
+  font-weight: var(--font-medium);
 }
 
-.emptyHint {
-  margin: 0;
-  color: var(--color-neutral);
-  font-size: 0.875rem;
-  opacity: 0.8;
-}
-
-/* Player Count */
-.playerCount {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  justify-content: center;
-}
-
-.countText {
-  font-weight: 600;
-  color: var(--color-primary);
-  font-size: 1rem;
-}
-
-.countHint {
-  color: var(--color-error);
-  font-size: 0.875rem;
-  font-style: italic;
-}
-
-/* Add Button */
-.addButton {
-  margin-bottom: var(--spacing-md);
-}
-
-/* Input Section */
-.inputSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  padding: var(--spacing-lg);
-  background: rgba(27, 94, 32, 0.05);
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-md);
-  animation: slideUp var(--transition-fast);
-}
-
-.nameInput {
-  margin-bottom: 0;
-}
-
-.inputButtons {
-  display: flex;
-  gap: var(--spacing-md);
-}
-
-.inputButtons button {
-  flex: 1;
-}
-
-.maxPlayersText {
-  text-align: center;
-  color: var(--color-neutral);
-  font-size: 0.875rem;
-  font-style: italic;
-  margin: var(--spacing-md) 0 0 0;
-}
-
-/* Start Section */
-.startSection {
-  padding-top: var(--spacing-xl);
-  border-top: 2px solid var(--color-card-border);
-}
-
-.startButton {
-  font-size: 1.25rem;
-  padding: var(--spacing-lg) var(--spacing-xl);
-}
-
-.startButton:disabled {
-  transform: none;
-  cursor: not-allowed;
-}
-
-/* Animations */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 767px) {
+/* Responsive */
+@media (max-width: 768px) {
   .header {
-    padding: var(--spacing-md) var(--spacing-sm);
-  }
-
-  .headerContent {
-    gap: var(--spacing-sm);
+    padding: var(--spacing-lg) var(--spacing-md);
   }
 
   .title {
-    font-size: 1.5rem;
-  }
-
-  .placeholder {
-    width: 60px;
+    font-size: var(--font-xl);
   }
 
   .main {
-    padding: var(--spacing-md) var(--spacing-sm);
+    padding: var(--spacing-xl) var(--spacing-md);
   }
 
   .sectionTitle {
-    font-size: 1.5rem;
+    font-size: var(--font-2xl);
   }
 
-  .playerItem {
-    padding: var(--spacing-md);
+  .card {
+    padding: var(--spacing-xl);
   }
 
-  .playerName {
-    font-size: 1rem;
-  }
-
-  .playerNumber {
-    width: 28px;
-    height: 28px;
-    font-size: 0.875rem;
-  }
-
-  .inputButtons {
+  .addPlayerForm {
     flex-direction: column;
   }
 
-  .startButton {
-    font-size: 1.125rem;
+  .addButton {
+    width: 100%;
   }
 }
-
