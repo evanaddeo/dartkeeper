@@ -31,11 +31,14 @@ export const CricketBoard: React.FC<CricketBoardProps> = ({
   // If odd number of players, add a dummy player to right side for layout
   const needsDummy = leftPlayers.length !== rightPlayers.length;
   
+  // Calculate grid template: equal space on left, fixed numbers column, equal space on right
+  const gridTemplate = `${leftPlayers.length}fr 80px ${rightPlayers.length + (needsDummy ? 1 : 0)}fr`;
+  
   return (
     <div className={styles.container}>
       <div className={styles.board}>
         {/* Header Row */}
-        <div className={styles.headerRow}>
+        <div className={styles.headerRow} style={{ gridTemplateColumns: gridTemplate }}>
           {/* Left Players */}
           {leftPlayers.map((player, index) => (
             <div key={player.id} className={styles.playerHeader}>
@@ -64,7 +67,7 @@ export const CricketBoard: React.FC<CricketBoardProps> = ({
           const isClosedForAll = isNumberClosedForAll(gameData.marks, players, number);
 
           return (
-            <div key={number} className={styles.numberRow}>
+            <div key={number} className={styles.numberRow} style={{ gridTemplateColumns: gridTemplate }}>
               {/* Left Player Cells */}
               {leftPlayers.map((player) => {
                 const marks = gameData.marks[player.id]?.[number] ?? 0;
@@ -129,7 +132,7 @@ export const CricketBoard: React.FC<CricketBoardProps> = ({
         })}
 
         {/* Points Row */}
-        <div className={`${styles.numberRow} ${styles.pointsRow}`}>
+        <div className={`${styles.numberRow} ${styles.pointsRow}`} style={{ gridTemplateColumns: gridTemplate }}>
           {/* Left Player Points */}
           {leftPlayers.map((player) => (
             <div key={player.id} className={styles.pointsCell}>
