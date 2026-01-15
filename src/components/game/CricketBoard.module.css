@@ -89,7 +89,9 @@
 .numberRow {
   display: grid;
   border-bottom: 2px solid var(--color-border);
+  height: 80px;
   min-height: 80px;
+  max-height: 80px;
 }
 
 .numberRow:last-child {
@@ -109,6 +111,7 @@
   width: 80px;
   min-width: 80px;
   max-width: 80px;
+  height: 100%;
 }
 
 .numberLabel {
@@ -124,13 +127,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 80px;
   min-height: 80px;
+  max-height: 80px;
   background: var(--color-card-bg);
   border: none;
   border-right: 2px solid var(--color-border);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
   font-family: inherit;
+  overflow: hidden;
 }
 
 .markCell:last-child {
@@ -157,6 +163,11 @@
   font-weight: 700;
   color: var(--color-text-primary);
   font-family: var(--font-score);
+  line-height: 1;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .openSymbol {
@@ -164,6 +175,11 @@
   font-weight: 700;
   color: var(--color-accent);
   font-family: var(--font-score);
+  line-height: 1;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Player Open - Green Background */
@@ -189,7 +205,9 @@
 .pointsRow {
   background: rgba(212, 175, 55, 0.1);
   border-top: 3px solid var(--color-secondary);
+  height: 70px;
   min-height: 70px;
+  max-height: 70px;
 }
 
 .pointsRow .numberCell {
@@ -204,6 +222,7 @@
   justify-content: center;
   background: var(--color-card-bg);
   border-right: 2px solid var(--color-border);
+  height: 100%;
 }
 
 .pointsCell:last-child {
@@ -215,12 +234,14 @@
   font-weight: 700;
   color: var(--color-accent);
   font-family: var(--font-score);
+  line-height: 1;
 }
 
 /* Dummy Cell (for odd number of players) */
 .dummyCell {
   background: var(--color-background);
   border-right: 2px solid var(--color-border);
+  height: 100%;
 }
 
 .dummyCell:last-child {

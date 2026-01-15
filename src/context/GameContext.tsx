@@ -151,6 +151,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const gameData = state.gameData as CricketData;
       const { playerId, number } = action.payload;
 
+      // Save current state to history for undo
+      const newHistory = [
+        ...state.history,
+        {
+          gameData: state.gameData,
+          currentPlayerIndex: state.currentPlayerIndex,
+          timestamp: Date.now(),
+        },
+      ];
+
       // Add mark
       const newMarks = addMark(
         gameData.marks,
@@ -187,12 +197,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           gameData: newGameData,
           gameStatus: 'finished',
           winner,
+          history: newHistory,
         };
       }
 
       return {
         ...state,
         gameData: newGameData,
+        history: newHistory,
       };
     }
 
