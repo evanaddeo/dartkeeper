@@ -7,7 +7,7 @@
 .board {
   width: 100%;
   background: var(--color-card-bg);
-  border: 3px solid var(--color-card-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -20,7 +20,9 @@
   display: grid;
   background: var(--color-surface);
   border-bottom: 2px solid var(--color-border);
+  height: 60px;
   min-height: 60px;
+  max-height: 60px;
 }
 
 .numberHeader,
@@ -47,10 +49,10 @@
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 1px;
+  text-transform: uppercase;
   width: 80px;
   min-width: 80px;
   max-width: 80px;
-  border-left: 2px solid var(--color-border);
 }
 
 .playerHeader {
@@ -89,9 +91,9 @@
 .numberRow {
   display: grid;
   border-bottom: 2px solid var(--color-border);
-  height: 80px;
-  min-height: 80px;
-  max-height: 80px;
+  height: 70px;
+  min-height: 70px;
+  max-height: 70px;
 }
 
 .numberRow:last-child {
@@ -105,13 +107,20 @@
   justify-content: center;
   background: var(--color-accent);
   color: var(--color-text-light);
-  border-right: 2px solid var(--color-border);
   border-left: 2px solid var(--color-border);
+  border-right: 2px solid var(--color-border);
   font-weight: 800;
   width: 80px;
   min-width: 80px;
   max-width: 80px;
   height: 100%;
+}
+
+.headerRow .numberCell,
+.pointsRow .numberCell {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: var(--spacing-md);
 }
 
 .numberLabel {
@@ -120,23 +129,34 @@
   color: var(--color-text-light);
 }
 
+.headerRow .numberLabel,
+.pointsRow .numberLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 /* Mark Cells - Interactive */
 .markCell {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80px;
-  min-height: 80px;
-  max-height: 80px;
+  height: 70px;
+  min-height: 70px;
+  max-height: 70px;
   background: var(--color-card-bg);
-  border: none;
   border-right: 2px solid var(--color-border);
   cursor: pointer;
   transition: background-color var(--transition-fast), transform var(--transition-fast);
   font-family: inherit;
   overflow: hidden;
+}
+
+.markCell:last-child {
+  border-right: none;
 }
 
 .markCell:last-child {
@@ -159,24 +179,22 @@
 
 /* Mark Symbols */
 .markSymbol {
-  font-size: 2rem;
+  font-size: 3.5rem;
   font-weight: 700;
   color: var(--color-text-primary);
   font-family: var(--font-score);
   line-height: 1;
-  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .openSymbol {
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-weight: 700;
   color: var(--color-accent);
   font-family: var(--font-score);
   line-height: 1;
-  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,17 +221,14 @@
 
 /* Points Row */
 .pointsRow {
-  background: rgba(212, 175, 55, 0.1);
-  border-top: 3px solid var(--color-secondary);
-  height: 70px;
-  min-height: 70px;
-  max-height: 70px;
+  background: var(--color-surface);
+  border-top: 2px solid var(--color-border);
+  height: 60px;
+  min-height: 60px;
+  max-height: 60px;
 }
 
-.pointsRow .numberCell {
-  background: var(--color-secondary);
-  color: var(--color-text-primary);
-}
+/* Points row styling removed - inherits from .numberCell */
 
 .pointsCell {
   padding: var(--spacing-lg);
