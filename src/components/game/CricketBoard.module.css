@@ -18,8 +18,8 @@
 /* Header Row */
 .headerRow {
   display: grid;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neutral) 100%);
-  border-bottom: 3px solid var(--color-secondary);
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
   min-height: 60px;
 }
 
@@ -42,13 +42,15 @@
 }
 
 .numberHeader {
-  background: var(--color-accent);
-  color: var(--color-text-light);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 1px;
+  width: 80px;
+  min-width: 80px;
   max-width: 80px;
-  min-width: 60px;
+  border-left: 2px solid var(--color-border);
 }
 
 .playerHeader {
